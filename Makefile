@@ -78,7 +78,7 @@ $(1): $(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGE
 endef
 
 # Default rule
-all: $(foreach base,$(BASE_NAMES),$(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
+all: combined $(foreach base,$(BASE_NAMES),$(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
 
 # Generate targets for all source files
 $(foreach base,$(BASE_NAMES),$(eval $(call GEN_TARGETS,$(base))))
@@ -87,22 +87,34 @@ previews: $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(S
 
 sprued: $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_sprued.stl)
 
+combined: $(foreach base,$(filter cs_% mbk,$(BASE_NAMES)), $(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
+	mkdir -p $(STL_DIR)/combined
+	$(OPENSCAD) $(SETTINGS_VAL) -o $(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_1.stl src/combine_set_1.scad
+	$(OPENSCAD) $(SETTINGS_VAL) -o $(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_2.stl src/combine_set_2.scad
+
 # Clean target
 clean:
 	rm -f $(foreach base,$(BASE_NAMES),$(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
 
 # Help target
 help:
-	@echo "Available targets:\n"
+	@echo "Individual targets:\n"
 	@$(foreach base,$(sort $(BASE_NAMES)), \
-		echo "$(base):"; \
+		echo "  $(base):"; \
 		$(foreach output,$(OUTPUTS), \
-			echo "  $(SRC_DIR)/gen_$(base)_$(output).scad"; \
+			echo "    $(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl"; \
 		) \
 		echo; \
 	)
-	@echo "preview:"
-	@echo "  Generate only preview stls."
+	@echo "all:"
+	@echo "  Generate everything."
+	@echo
+	@echo "combined:"
+	@echo "  Generate optimized stls that contain all unique variations."
 	@echo
 	@echo "sprued:"
 	@echo "  Generate only sprued stls."
+	@echo
+	@echo "preview:"
+	@echo "  Generate only preview stls."
+	@echo

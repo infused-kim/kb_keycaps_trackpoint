@@ -1,6 +1,7 @@
 # Ignore everything
-*
+*/*
 
 # But not these files...
+!./combined/README.md
 !.gitignore
 !README.md
