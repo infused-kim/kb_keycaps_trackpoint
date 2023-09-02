@@ -71,9 +71,8 @@ cs_r3_levee_r  = [
    cs_translate, [0, 0, 180], [0, 0, 0]
 ];
 cs_r3_levee_r_dot = [
-   "../keycaps/chicago_steno/cs_r3_levee_l_dot.stl",
+   "../keycaps/chicago_steno/cs_r3_levee_r_dot.stl",
 
-   // By default the r3_levee key is rotated for the bottom row
-   // here we rotate it for the top row.
-   cs_translate, [0, 0, 180], [0, 0, 0]
+   // This is already correctly rotated and we don't need to do anything
+    cs_translate, [0, 0, 0], [0, 0, 0]
 ];
