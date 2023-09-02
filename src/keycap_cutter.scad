@@ -20,7 +20,7 @@ module draw_trackpoint(d, h, key_stagger) {
     //
     // Since the key positions always balance each other out, x is always 0
     // And for y we only need to divide the key_stagger by 2
-    avg_y = key_stagger / 2;
+    avg_y = -key_stagger / 2;
     translate([0, avg_y, 0])
         cylinder($fn=60, d=d, h=h, center=true);
 }
