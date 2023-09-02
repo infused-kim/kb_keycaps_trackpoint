@@ -23,10 +23,10 @@ include <cs_keys.scad>
 cs_translate = [0, 18, 0];
 
 cut_keycaps(
-   keycap_top_left=cs_r2_top,
-   keycap_top_right=cs_r2_top,
-   keycap_bottom_left=cs_r3,
-   keycap_bottom_right=cs_r3_bar,
+    keycap_top_left=cs_r2_levee_top_l,
+   keycap_top_right=cs_r2_levee_top_r,
+   keycap_bottom_left=cs_r3_levee_l,
+   keycap_bottom_right=cs_r3_levee_r_dot,
    output,
    key_profile,
    key_stagger,

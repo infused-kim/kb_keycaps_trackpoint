@@ -23,9 +23,9 @@ include <cs_keys.scad>
 cs_translate = [0, 18, 0];
 
 cut_keycaps(
-   keycap_top_left=cs_r2_top,
+   keycap_top_left=cs_r2x_top,
    keycap_top_right=cs_r2_top,
-   keycap_bottom_left=cs_r3,
+   keycap_bottom_left=cs_r3x,
    keycap_bottom_right=cs_r3_bar,
    output,
    key_profile,

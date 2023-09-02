@@ -17,16 +17,11 @@ debug = false;
 use <keycap_cutter.scad>
 include <cs_keys.scad>
 
-// The cutter expects keycaps to be centered at origin,
-// but the cs keycaps stls are not.
-// So here we adjust for that
-cs_translate = [0, 18, 0];
-
 cut_keycaps(
-   keycap_top_left=cs_r2_top,
-   keycap_top_right=cs_r2_top,
+   keycap_top_left=cs_r3,
+   keycap_top_right=cs_r3,
    keycap_bottom_left=cs_r3,
-   keycap_bottom_right=cs_r3_bar,
+   keycap_bottom_right=cs_r3_dot,
    output,
    key_profile,
    key_stagger,
