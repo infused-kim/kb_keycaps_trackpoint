@@ -29,27 +29,27 @@ STAGGER_VAL=$(shell if echo $(STAGGER) | grep -qE '^[-+]?[0-9]*\.?[0-9]+$$'; the
 
 # Rule to generate the target names
 define GEN_TARGETS
-$(STL_DIR)/$(1)/$(1)_$(STAGGER)_preview.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_preview.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"preview\" -D key_stagger=$(STAGGER_VAL) -o $$@ $$<
 
-$(STL_DIR)/$(1)/$(1)_$(STAGGER)_sprued.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_sprued.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"sprued\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
 
-$(STL_DIR)/$(1)/$(1)_$(STAGGER)_top_left.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_top_left.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"top_left\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
 
-$(STL_DIR)/$(1)/$(1)_$(STAGGER)_top_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_top_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"top_right\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
 
-$(STL_DIR)/$(1)/$(1)_$(STAGGER)_bottom_left.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_bottom_left.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"bottom_left\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
 
-$(STL_DIR)/$(1)/$(1)_$(STAGGER)_bottom_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_bottom_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"bottom_right\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
 
