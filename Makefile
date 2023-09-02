@@ -45,19 +45,29 @@ $(STL_DIR)/$(1)/$(1)_$(STAGGER)_bottom_left.stl: $(SRC_DIR)/gen_$(1).scad src/ke
 $(STL_DIR)/$(1)/$(1)_$(STAGGER)_bottom_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"bottom_right\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
+
+$(STL_DIR)/$(1)/$(1)_$(STAGGER)_sprued.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad
+	mkdir -p $(STL_DIR)/$(1)
+	$(OPENSCAD) -D output=\"sprued\" -D key_stagger=$(STAGGER_VAL)  -o $$@ $$<
 endef
 
 # Default rule
-all: $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(STAGGER)_preview.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_right.stl)
+all: $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(STAGGER)_preview.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_sprued.stl)
 
 # Generate targets for all source files
 $(foreach base,$(BASE_NAMES),$(eval $(call GEN_TARGETS,$(base))))
 
 # Dynamic clean target
 clean:
-	rm -f $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(STAGGER)_preview.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_right.stl)
+	rm -f $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(STAGGER)_preview.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_sprued.stl)
 
 # Help target
 help:
-	@echo "Available targets:"
-	@echo $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(STAGGER)_preview.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_top_right.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_left.stl $(STL_DIR)/$(base)/$(base)_$(STAGGER)_bottom_right.stl)
+	@echo "Available targets:\n"
+	@$(foreach base,$(sort $(BASE_NAMES)), \
+		echo "$(base):"; \
+		$(foreach target,$(TARGET_VALUES), \
+			echo "  $(SRC_DIR)/gen_$(base)_$(target).scad"; \
+		) \
+		echo; \
+	)

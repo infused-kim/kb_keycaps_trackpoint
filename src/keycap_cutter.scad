@@ -1,3 +1,5 @@
+use <stl_combiner.scad>
+
 key_spread_choc_x = 18;
 key_spread_choc_y = 17;
 key_spread_mx_x = 19;
@@ -60,18 +62,18 @@ module draw_keycaps(keycap_top_left,
 }
 
 
-module cut_keycaps(keycap_top_left,
-                   keycap_top_right,
-                   keycap_bottom_left,
-                   keycap_bottom_right,
-                   output,
-                   key_profile,
-                   key_stagger,
-                   key_spread_x,
-                   key_spread_y,
-                   tp_diameter,
-                   tp_height,
-                   debug=false) {
+module _cut_keycaps(keycap_top_left,
+                    keycap_top_right,
+                    keycap_bottom_left,
+                    keycap_bottom_right,
+                    output,
+                    key_profile,
+                    key_stagger,
+                    key_spread_x,
+                    key_spread_y,
+                    tp_diameter,
+                    tp_height,
+                    debug=false) {
 
     // If alternative that avoids inability to assign values in if statments
     key_offset_x = (
@@ -138,5 +140,97 @@ module cut_keycaps(keycap_top_left,
     if(debug == true) {
         translate(origin_move)
             draw_trackpoint(tp_diameter, tp_height, stagger_val);
+    }
+}
+
+module gen_sprued_keycaps(keycap_top_left,
+                          keycap_top_right,
+                          keycap_bottom_left,
+                          keycap_bottom_right,
+                          key_profile,
+                          key_stagger,
+                          key_spread_x,
+                          key_spread_y,
+                          tp_diameter,
+                          tp_height,
+                          debug=false) {
+
+    outputs = ["top_left", "top_right", "bottom_left", "bottom_right"];
+    sprue_spacing = (
+        key_profile == "mx"
+            ? key_spread_mx_x
+        : key_profile == "choc"
+            ? key_spread_choc_x
+        : // else
+            key_spread_x
+    );
+
+    union() {
+        for (i = [0 : len(outputs) - 1]) {
+            output = outputs[i];
+            translate([i * sprue_spacing, 0, 0])
+
+                _cut_keycaps(
+                    keycap_top_left,
+                    keycap_top_right,
+                    keycap_bottom_left,
+                    keycap_bottom_right,
+                    output,
+                    key_profile,
+                    key_stagger,
+                    key_spread_x,
+                    key_spread_y,
+                    tp_diameter,
+                    tp_height,
+                    debug
+                );
+        }
+
+        gen_sprues(len(outputs) - 1);
+    };
+}
+
+module cut_keycaps(keycap_top_left,
+                   keycap_top_right,
+                   keycap_bottom_left,
+                   keycap_bottom_right,
+                   output,
+                   key_profile,
+                   key_stagger,
+                   key_spread_x,
+                   key_spread_y,
+                   tp_diameter,
+                   tp_height,
+                   debug=false) {
+
+    if(output == "sprued") {
+        gen_sprued_keycaps(
+            keycap_top_left,
+            keycap_top_right,
+            keycap_bottom_left,
+            keycap_bottom_right,
+            key_profile,
+            key_stagger,
+            key_spread_x,
+            key_spread_y,
+            tp_diameter,
+            tp_height,
+            debug
+        );
+    } else {
+        _cut_keycaps(
+            keycap_top_left,
+            keycap_top_right,
+            keycap_bottom_left,
+            keycap_bottom_right,
+            output,
+            key_profile,
+            key_stagger,
+            key_spread_x,
+            key_spread_y,
+            tp_diameter,
+            tp_height,
+            debug
+        );
     }
 }
