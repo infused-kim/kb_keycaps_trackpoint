@@ -1,18 +1,3 @@
-output = "preview";
-
-keycap_top_left  = "../keycaps/mbk/mbk_keycap_1u.stl";
-keycap_top_right  = "../keycaps/mbk/mbk_keycap_1u.stl";
-keycap_bottom_left  = "../keycaps/mbk/mbk_keycap_1u.stl";
-keycap_bottom_right  = "../keycaps/mbk/mbk_keycap_1u.stl";
-
-key_profile = "choc"; // choc, mx or custom while setting key_spread_x and y
-key_stagger = -2.375;
-key_spread_x = 0;
-key_spread_y = 0;
-
-tp_diameter = 9.5; //  Most Lenovo trackpoints are 8.5mm wide
-tp_height = 14;
-
 key_spread_choc_x = 18;
 key_spread_choc_y = 17;
 key_spread_mx_x = 19;
@@ -38,16 +23,31 @@ module draw_trackpoint(d, h, key_stagger) {
         cylinder($fn=60, d=d, h=h, center=true);
 }
 
-module draw_keycap(stl_path, offset_x=0, offset_y=0, should_mirror=false, rotation=0) {
-    m = should_mirror ? [0, 1, 0] : [0, 0, 0];
+module draw_keycap(keycap_arr,
+                   offset_x,
+                   offset_y,) {
+
+    stl_path = keycap_arr[0];
+    translation = keycap_arr[1];
+    rotation = keycap_arr[2];
+    mirroring = keycap_arr[3];
 
     translate([offset_x, offset_y, 0])
-        rotate([0, rotation, 0])
-            mirror(m)
-                import(stl_path);
+        rotate(rotation)
+            mirror(mirroring)
+                translate(translation)
+                    import(stl_path);
 }
 
-module draw_keycaps(offset_x, offset_y, stagger, output) {
+module draw_keycaps(keycap_top_left,
+                    keycap_top_right,
+                    keycap_bottom_left,
+                    keycap_bottom_right,
+                    output,
+                    offset_x,
+                    offset_y,
+                    stagger,
+                    adjustment) {
 
     if(output == "top_left" || output == "preview")
         draw_keycap(keycap_top_left, -offset_x, +offset_y + stagger);
@@ -60,8 +60,18 @@ module draw_keycaps(offset_x, offset_y, stagger, output) {
 }
 
 
-module main() {
-
+module cut_keycaps(keycap_top_left,
+                   keycap_top_right,
+                   keycap_bottom_left,
+                   keycap_bottom_right,
+                   output,
+                   key_profile,
+                   key_stagger,
+                   key_spread_x,
+                   key_spread_y,
+                   tp_diameter,
+                   tp_height,
+                   debug=false) {
 
     // If alternative that avoids inability to assign values in if statments
     key_offset_x = (
@@ -94,10 +104,18 @@ module main() {
     }
 
     difference() {
-        draw_keycaps(key_offset_x, key_offset_y, key_stagger, output);
+        draw_keycaps(
+            keycap_top_left, keycap_top_right,
+            keycap_bottom_left, keycap_bottom_right,
+            output,
+            key_offset_x, key_offset_y, key_stagger
+        );
         draw_trackpoint(tp_diameter, tp_height, key_stagger);
     }
 
+    if(debug == true) {
+        draw_trackpoint(tp_diameter, tp_height, key_stagger);
+    }
 }
 
 main();
