@@ -1,7 +1,7 @@
 output = "preview";
 
 key_profile = "choc"; // choc"../keycaps/mbk/mbk_keycap_1u.stl"mx or custom while setting key_spread_x and y
-key_stagger = -2.375;
+key_stagger = "corne";
 
 // Set key_profile to "custom" and then these two parameters if you
 // want to use a custom distance between keycaps
@@ -17,8 +17,14 @@ debug = false;
 use <keycap_cutter.scad>
 
 // Keycap array: stl path, translate adjustment, rotation, mirror
-mbk_1u = ["../keycaps/mbk/mbk_keycap_1u.stl", [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-mbk_1u_homing = ["../keycaps/mbk/mbk_keycap_1u_homing.stl", [23, 0, 0], [0, 0, 0], [0, 0, 0]];
+mbk_1u = [
+    "../keycaps/mbk/mbk_keycap_1u.stl",
+    [0, 0, 0], [0, 0, 0], [0, 0, 0]
+];
+mbk_1u_homing = [
+    "../keycaps/mbk/mbk_keycap_1u_homing.stl",
+    [23, 0, 0], [0, 0, 0], [0, 0, 0]
+];
 
 cut_keycaps(
     keycap_top_left=mbk_1u,

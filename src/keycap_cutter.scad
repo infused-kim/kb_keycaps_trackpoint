@@ -50,11 +50,11 @@ module draw_keycaps(keycap_top_left,
                     adjustment) {
 
     if(output == "top_left" || output == "preview")
-        draw_keycap(keycap_top_left, -offset_x, +offset_y + stagger);
+        draw_keycap(keycap_top_left, -offset_x, +offset_y - stagger);
     if(output == "top_right" || output == "preview")
         draw_keycap(keycap_top_right, +offset_x, +offset_y);
     if(output == "bottom_left" || output == "preview")
-        draw_keycap(keycap_bottom_left, -offset_x, -offset_y + stagger);
+        draw_keycap(keycap_bottom_left, -offset_x, -offset_y - stagger);
     if(output == "bottom_right" || output == "preview")
         draw_keycap(keycap_bottom_right, +offset_x, -offset_y);
 }
@@ -103,18 +103,20 @@ module cut_keycaps(keycap_top_left,
 
     }
 
+    stagger_val = key_stagger == "corne" ? 2.375 : key_stagger;
+
     difference() {
         draw_keycaps(
             keycap_top_left, keycap_top_right,
             keycap_bottom_left, keycap_bottom_right,
             output,
-            key_offset_x, key_offset_y, key_stagger
+            key_offset_x, key_offset_y, stagger_val
         );
-        draw_trackpoint(tp_diameter, tp_height, key_stagger);
+        draw_trackpoint(tp_diameter, tp_height, stagger_val);
     }
 
     if(debug == true) {
-        draw_trackpoint(tp_diameter, tp_height, key_stagger);
+        draw_trackpoint(tp_diameter, tp_height, stagger_val);
     }
 }
 

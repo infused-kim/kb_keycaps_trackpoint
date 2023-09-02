@@ -1,7 +1,7 @@
 output = "preview";
 
 key_profile = "choc"; // choc, mx or custom while setting key_spread_x and y
-key_stagger = -2.375;
+key_stagger = "corne"; // Change to numerical value to customize
 
 // Set key_profile to "custom" and then these two parameters if you
 // want to use a custom distance between keycaps
@@ -16,19 +16,31 @@ debug = false;
 
 use <keycap_cutter.scad>
 
+// The cutter expects keycaps to be centered at origin,
+// but the cs keycaps stls are not.
+// So here we adjust for that
+cs_translate = [0, 18, 0];
 
-// Keycap array: stl path, translate adjustment, rotation, mirror
+// keycap_array_format = [
+//    stl_path,
+//    translate_adjustment,
+//    rotation_adjustment,
+//    mirror_adjustment,
+// ]
 cs_r2_top = [
    "../keycaps/chicago_steno/cs_r2_1.stl",
-   [0, 18, 0], [0, 0, 180], [0, 0, 0]
+
+   // By default the r2 key is rotated for the bottom row
+   // here we rotate it for the top row
+   cs_translate, [0, 0, 180], [0, 0, 0]
 ];
 cs_r3 = [
    "../keycaps/chicago_steno/cs_r3_1.stl",
-   [0, 18, 0], [0, 0, 0], [0, 0, 0]
+   cs_translate, [0, 0, 0], [0, 0, 0]
 ];
 cs_r3_bar = [
    "../keycaps/chicago_steno/cs_r3_1_bar.stl",
-   [0, 18, 0], [0, 0, 0], [0, 0, 0]
+   cs_translate, [0, 0, 0], [0, 0, 0]
 ];
 
 cut_keycaps(
