@@ -76,16 +76,20 @@ module cut_keycaps(keycap_top_left,
     // If alternative that avoids inability to assign values in if statments
     key_offset_x = (
         key_profile == "mx"
-        ? key_spread_mx_x / 2
+            ? key_spread_mx_x / 2
         : key_profile == "choc"
-            ? key_spread_choc_x / 2 :  key_spread_x / 2
+            ? key_spread_choc_x / 2
+        : // else
+            key_spread_x / 2
     );
 
     key_offset_y = (
         key_profile == "mx"
-        ? key_spread_mx_y / 2
+            ? key_spread_mx_y / 2
         : key_profile == "choc"
-            ? key_spread_choc_y / 2 :  key_spread_y / 2
+            ? key_spread_choc_y / 2
+        : // else
+            key_spread_y / 2
     );
 
     if(key_profile != "mx" &&
@@ -105,19 +109,34 @@ module cut_keycaps(keycap_top_left,
 
     stagger_val = key_stagger == "corne" ? 2.375 : key_stagger;
 
-    difference() {
-        draw_keycaps(
-            keycap_top_left, keycap_top_right,
-            keycap_bottom_left, keycap_bottom_right,
-            output,
-            key_offset_x, key_offset_y, stagger_val
-        );
-        draw_trackpoint(tp_diameter, tp_height, stagger_val);
-    }
+    // If we are exporting individual keys, we want re-center them
+    // around origin to make sprueing easy.
+    origin_move = (
+        output == "top_left"
+            ? [+key_offset_x, -key_offset_y + stagger_val, 0]
+        : output == "top_right"
+            ? [-key_offset_x, -key_offset_y, 0]
+        : output == "bottom_left"
+            ? [+key_offset_x, +key_offset_y + stagger_val, 0]
+        : output == "bottom_right"
+            ? [-key_offset_x, +key_offset_y, 0]
+        : //else
+            [0, 0, 0]
+    );
+
+    translate(origin_move)
+        difference() {
+            draw_keycaps(
+                keycap_top_left, keycap_top_right,
+                keycap_bottom_left, keycap_bottom_right,
+                output,
+                key_offset_x, key_offset_y, stagger_val
+            );
+            draw_trackpoint(tp_diameter, tp_height, stagger_val);
+        }
 
     if(debug == true) {
-        draw_trackpoint(tp_diameter, tp_height, stagger_val);
+        translate(origin_move)
+            draw_trackpoint(tp_diameter, tp_height, stagger_val);
     }
 }
-
-main();
