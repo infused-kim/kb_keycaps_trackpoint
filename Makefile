@@ -133,7 +133,8 @@ combined: $(TARGETS_COMBINED)
 
 # Clean target
 clean:
-	rm -f $(TARGETS_GEN_ALL)
+	rm -f $(TARGETS_GEN_ALL) $(TARGETS_COMBINED)
+	rmdir $(foreach base_name,$(BASE_NAMES),$(STL_DIR)/$(base_name) )
 
 # Help target
 help:
