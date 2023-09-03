@@ -32,14 +32,24 @@ OPENSCAD_CMD=$(OPENSCAD) $(OPENSCAD_OPTIONS)
 SRC_DIR := src
 STL_DIR := stl
 
-# Outputs to generate
-OUTPUTS := preview sprued top_left top_right bottom_left bottom_right
-
 # Source files
 SRCS := $(wildcard $(SRC_DIR)/gen_*.scad)
 
 # Base names without prefix and suffix
 BASE_NAMES := $(patsubst $(SRC_DIR)/gen_%.scad,%,$(SRCS))
+
+# Outputs to generate
+OUTPUTS := preview sprued top_left top_right bottom_left bottom_right
+
+# Variables for the each target output
+TARGETS_GEN_ALL := $(foreach base,$(BASE_NAMES),$(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
+
+TARGETS_GEN_PREVIEWS := $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_preview.stl)
+
+TARGETS_GEN_SPRUED := $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_sprued.stl)
+
+# Default rule
+all: $(TARGETS_GEN) combined
 
 # Convert stagger to integer or string parameter
 STAGGER_VAL=$(shell if echo $(STAGGER) | grep -qE '^[-+]?[0-9]*\.?[0-9]+$$'; then echo $(STAGGER); else echo \\\\\"$(STAGGER)\\\\\"; fi)
@@ -72,20 +82,17 @@ $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_bottom_right.stl: $(SRC_DIR)/gen_$(1)
 	mkdir -p $(STL_DIR)/$(1)
 	$(OPENSCAD) -D output=\"bottom_right\" $(SETTINGS_VAL) -o $$@ $$<
 
-# Top level target, such as `cs_r2_r3_homing_bar`
+# Top level targets, such as `cs_r2_r3_homing_bar`
 $(1): $(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl)
 
 endef
 
-# Default rule
-all: combined $(foreach base,$(BASE_NAMES),$(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
-
 # Generate targets for all source files
 $(foreach base,$(BASE_NAMES),$(eval $(call GEN_TARGETS,$(base))))
 
-previews: $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_preview.stl)
+previews: $(TARGETS_GEN_PREVIEWS)
 
-sprued: $(foreach base,$(BASE_NAMES),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_sprued.stl)
+sprued: $(TARGETS_GEN_SPRUED)
 
 combined: $(foreach base,$(filter cs_% mbk,$(BASE_NAMES)), $(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
 	mkdir -p $(STL_DIR)/combined
@@ -94,15 +101,15 @@ combined: $(foreach base,$(filter cs_% mbk,$(BASE_NAMES)), $(foreach output,$(OU
 
 # Clean target
 clean:
-	rm -f $(foreach base,$(BASE_NAMES),$(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
+	rm -f $(TARGETS_GEN_ALL)
 
 # Help target
 help:
 	@echo "Individual targets:\n"
 	@$(foreach base,$(sort $(BASE_NAMES)), \
 		echo "  $(base):"; \
-		$(foreach output,$(OUTPUTS), \
-			echo "    $(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl"; \
+		$(foreach target,$(TARGETS_GEN_ALL), \
+			echo "    $(target)"; \
 		) \
 		echo; \
 	)
