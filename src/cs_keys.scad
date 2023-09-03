@@ -23,17 +23,17 @@ cs_r2x_top = [
    // here we rotate it for the top row
    cs_translate, [0, 0, 180], [0, 0, 0]
 ];
-cs_r2_levee_top_r = [
-   "../keycaps/chicago_steno/cs_r2_levee_l.stl",
+cs_r2_lateral_top_r = [
+   "../keycaps/chicago_steno/cs_r2_lateral_l.stl",
 
-   // By default the r2_levee key is rotated for the bottom row
+   // By default the r2_lateral key is rotated for the bottom row
    // here we rotate it for the top row
    cs_translate, [0, 0, 180], [0, 0, 0]
 ];
-cs_r2_levee_top_l = [
-   "../keycaps/chicago_steno/cs_r2_levee_l.stl",
+cs_r2_lateral_top_l = [
+   "../keycaps/chicago_steno/cs_r2_lateral_l.stl",
 
-   // By default the r2_levee key is rotated for the bottom row
+   // By default the r2_lateral key is rotated for the bottom row
    // here we rotate it for the top row.
    // On top of that we mirror it to create the version for the left side
    cs_translate, [0, 0, 180], [1, 0, 0]
@@ -54,24 +54,24 @@ cs_r3x = [
    "../keycaps/chicago_steno/cs_r3x_1.stl",
    cs_translate, [0, 0, 0], [0, 0, 0]
 ];
-cs_r3_levee_l = [
-   "../keycaps/chicago_steno/cs_r3_levee_l.stl",
+cs_r3_lateral_l = [
+   "../keycaps/chicago_steno/cs_r3_lateral_l.stl",
 
-   // By default the r3_levee key is rotated for the bottom row
+   // By default the r3_lateral key is rotated for the bottom row
    // here we rotate it for the top row
    // On top of that we mirror it to create the version for the left side
    cs_translate, [0, 0, 180], [1, 0, 0]
 ];
-cs_r3_levee_r  = [
-   "../keycaps/chicago_steno/cs_r3_levee_l.stl",
+cs_r3_lateral_r  = [
+   "../keycaps/chicago_steno/cs_r3_lateral_l.stl",
 
-   // By default the r3_levee key is rotated for the bottom row
+   // By default the r3_lateral key is rotated for the bottom row
    // here we rotate it for the top row
    // On top of that we mirror it to create the version for the left side
    cs_translate, [0, 0, 180], [0, 0, 0]
 ];
-cs_r3_levee_r_dot = [
-   "../keycaps/chicago_steno/cs_r3_levee_r_dot.stl",
+cs_r3_lateral_r_dot = [
+   "../keycaps/chicago_steno/cs_r3_lateral_r_dot.stl",
 
    // This is already correctly rotated and we don't need to do anything
     cs_translate, [0, 0, 0], [0, 0, 0]
