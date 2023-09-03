@@ -90,14 +90,25 @@ endef
 # Generate targets for all source files
 $(foreach base,$(BASE_NAMES),$(eval $(call GEN_TARGETS,$(base))))
 
+# Generate targets for all source files starting with "combine_set"
+COMBINED_TARGETS := $(patsubst src/combine_set_%.scad,%,$(wildcard src/combine_set_*.scad))
+
+
+define GEN_COMBINED_TARGETS
+$(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_$(1).stl: src/combine_set_$(1).scad $(TARGETS_GEN_ALL)
+	mkdir -p $(STL_DIR)/combined
+	$(OPENSCAD) $(SETTINGS_VAL) -o $$@ $$<
+endef
+
+$(foreach target,$(COMBINED_TARGETS),$(eval $(call GEN_COMBINED_TARGETS,$(target))))
+
+TARGETS_COMBINED := $(foreach target,$(COMBINED_TARGETS),$(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_$(target).stl)
+
 previews: $(TARGETS_GEN_PREVIEWS)
 
 sprued: $(TARGETS_GEN_SPRUED)
 
-combined: $(foreach base,$(filter cs_% mbk,$(BASE_NAMES)), $(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl))
-	mkdir -p $(STL_DIR)/combined
-	$(OPENSCAD) $(SETTINGS_VAL) -o $(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_1.stl src/combine_set_1.scad
-	$(OPENSCAD) $(SETTINGS_VAL) -o $(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_2.stl src/combine_set_2.scad
+combined: $(TARGETS_COMBINED)
 
 # Clean target
 clean:
@@ -113,6 +124,10 @@ help:
 		) \
 		echo; \
 	)
+	@echo
+	@echo "Combined sets:"
+	@$(foreach target,$(TARGETS_COMBINED),echo "  $(target)";)
+	@echo
 	@echo "all:"
 	@echo "  Generate everything."
 	@echo
