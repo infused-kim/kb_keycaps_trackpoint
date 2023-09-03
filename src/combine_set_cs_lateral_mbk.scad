@@ -1,3 +1,8 @@
+// This set contains all chicago steno lateral keycaps for both 3-row and
+// 4-row keyboards. It has the top row keys in both R2 and R3 variations.
+//
+// On top of that it includes all MBK keycaps.
+
 key_stagger = "corne";
 key_profile = "choc";
 

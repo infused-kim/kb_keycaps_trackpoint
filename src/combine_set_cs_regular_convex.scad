@@ -1,4 +1,11 @@
 
+// This set contains the regular variations of chicago steno keycaps for
+// both 3-row and 4-row keyboards. It has the top row keys in both R2 and
+// R3 variations.
+//
+// It also has both variations of the homing key. On top of that it
+// includes all three convex keys.
+
 key_stagger = "corne";
 key_profile = "choc";
 
