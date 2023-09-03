@@ -59,28 +59,46 @@ SETTINGS_VAL=-D key_stagger=$(STAGGER_VAL) -D key_profile=\"$(PROFILE)\" -D key_
 # Rule to generate the target names
 define GEN_TARGETS
 $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_preview.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
-	mkdir -p $(STL_DIR)/$(1)
+	@@mkdir -p $(STL_DIR)/$(1)
+	@echo "Building $$@..."
 	$(OPENSCAD) -D output=\"preview\" $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 
 $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_sprued.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
-	mkdir -p $(STL_DIR)/$(1)
+	@mkdir -p $(STL_DIR)/$(1)
+	@echo "Building $$@..."
 	$(OPENSCAD) -D output=\"sprued\" $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 
 $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_top_left.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
-	mkdir -p $(STL_DIR)/$(1)
+	@mkdir -p $(STL_DIR)/$(1)
+	@echo "Building $$@..."
 	$(OPENSCAD) -D output=\"top_left\" $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 
 $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_top_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
-	mkdir -p $(STL_DIR)/$(1)
+	@mkdir -p $(STL_DIR)/$(1)
+	@echo "Building $$@..."
 	$(OPENSCAD) -D output=\"top_right\" $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 
 $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_bottom_left.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
-	mkdir -p $(STL_DIR)/$(1)
+	@mkdir -p $(STL_DIR)/$(1)
+	@echo "Building $$@..."
 	$(OPENSCAD) -D output=\"bottom_left\" $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 
 $(STL_DIR)/$(1)/$(1)_$(PROFILE)_$(STAGGER)_bottom_right.stl: $(SRC_DIR)/gen_$(1).scad src/keycap_cutter.scad src/stl_combiner.scad $(if $(filter cs_%,$(1)),src/cs_keys.scad)
-	mkdir -p $(STL_DIR)/$(1)
+	@mkdir -p $(STL_DIR)/$(1)
+	@echo "Building $$@..."
 	$(OPENSCAD) -D output=\"bottom_right\" $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 
 # Top level targets, such as `cs_r2_r3_homing_bar`
 $(1): $(foreach output,$(OUTPUTS),$(STL_DIR)/$(base)/$(base)_$(PROFILE)_$(STAGGER)_$(output).stl)
@@ -96,8 +114,11 @@ COMBINED_TARGETS := $(patsubst src/combine_set_%.scad,%,$(wildcard src/combine_s
 
 define GEN_COMBINED_TARGETS
 $(STL_DIR)/combined/combined_set_$(PROFILE)_$(STAGGER)_$(1).stl: src/combine_set_$(1).scad $(TARGETS_GEN_ALL)
-	mkdir -p $(STL_DIR)/combined
+	@mkdir -p $(STL_DIR)/combined
+	@echo "Building $$@..."
 	$(OPENSCAD) $(SETTINGS_VAL) -o $$@ $$<
+	@echo
+	@echo
 endef
 
 $(foreach target,$(COMBINED_TARGETS),$(eval $(call GEN_COMBINED_TARGETS,$(target))))
@@ -140,3 +161,19 @@ help:
 	@echo "preview:"
 	@echo "  Generate only preview stls."
 	@echo
+	@echo --
+	@echo
+	@echo "Parameters:"
+	@echo "  You can customize the output using the following parameters with any of the targets above..."
+	@echo
+	@echo "  STAGGER=5.5"
+	@echo "    Changes the stagger"
+	@echo
+	@echo "  PROFILE=mx (Default: choc; Allowed: choc, mx, custom)"
+	@echo "    Changes the key spacing"
+	@echo
+	@echo "  PROFILE=custom SPREADX=20 SPREADY=22"
+	@echo "    Changes the key spacing to a custom value"
+	@echo
+	@echo "  DEBUG=true"
+	@echo "    Render the trackpoint cylinder instead of cutting the keycaps"
