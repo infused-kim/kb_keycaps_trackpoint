@@ -76,3 +76,9 @@ cs_r3_lateral_r_dot = [
    // This is already correctly rotated and we don't need to do anything
     cs_translate, [0, 0, 0], [0, 0, 0]
 ];
+cs_r3_lateral_r_bar = [
+   "../keycaps/chicago_steno/cs_r3_lateral_r_bar.stl",
+
+   // This is already correctly rotated and we don't need to do anything
+    cs_translate, [0, 0, 0], [0, 0, 0]
+];
