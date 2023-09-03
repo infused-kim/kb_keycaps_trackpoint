@@ -12,8 +12,8 @@ PROFILE ?= choc
 
 # If you use PROFILE=custom, you can adjust the value below to change
 # the spacing of the keys to a non-standard value.
-SPREADX ?= 20
-SPREADY ?= 20
+SPREADX ?= 0
+SPREADY ?= 0
 
 # Set to true to draw the trackpoint cylinder used for cutting out the hole
 DEBUG ?= false
